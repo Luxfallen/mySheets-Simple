@@ -108,13 +108,13 @@ nav {
   }
 }
 
-.bpList{
+.listItem{
   h1{
     color: red;
     display: inline-block;
     width: 1.5em;
   }
-  h3 {
+  h2 h3 {
     display: inline-block;
     width: $leftColW - 10vw;
   }

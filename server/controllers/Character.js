@@ -1,7 +1,7 @@
 const models = require('../models');
 const Character = models.Character;
-/*
-const characterPage = (request, response) => {
+
+const renderCharacter = (request, response) => {
   Character.CharacterModel.findByOwner(request.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
@@ -10,7 +10,7 @@ const characterPage = (request, response) => {
     return response.render('app', { csrfToken: request.csrfToken(), characters: docs });
   });
 };
-*/
+
 const makeCharacter = (request, response) => {
   if (!request.body.name) {
     return response.status(400).json({ error: 'Characters need names' });
@@ -65,7 +65,7 @@ const deleteCharacter = (request, response) => {
 };
 
 module.exports = {
-  // character: characterPage,
+  renderChar: renderCharacter,
   makeChar: makeCharacter,
   getChar: getCharacters,
   delChar: deleteCharacter,

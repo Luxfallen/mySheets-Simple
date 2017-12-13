@@ -10,6 +10,7 @@ const router = (app) => {
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/donate', mid.requiresSecure, controllers.renderDonate);
   app.get('/about', controllers.renderAbout);
+  app.get('/app', mid.requiresLogin, mid.requiresSecure, controllers.Character.renderChar);
   app.post('/newChar', mid.requiresLogin, controllers.Character.makeChar);
   app.get('/getChar', mid.requiresLogin, controllers.Character.getChar);
   app.delete('/delChar', mid.requiresLogin, controllers.Character.delChar);

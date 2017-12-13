@@ -4,7 +4,9 @@ const Account = models.Account;
 // Original Author: Cody Van De Mark
 
 const renderLogin = (request, response) => {
-  response.render('login', { csrfToken: request.csrfToken() });
+  response.render('login', {
+    csrfToken: request.csrfToken(),
+  });
 };
 
 const login = (request, response) => {
@@ -14,20 +16,26 @@ const login = (request, response) => {
   const password = `${req.body.pass}`;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password are required' });
+    return res.status(400).json({
+      error: 'Username and password are required',
+    });
   }
   return Account.AccountModel.authenticate(username, password, (err, account) => {
     if (err || !account) {
-      return res.status(401).json({ error: 'Wrong username/password' });
+      return res.status(401).json({
+        error: 'Wrong username/password',
+      });
     }
     req.session.account = Account.AccountModel.toAPI(account);
-    return res.json({ redirect: '/' });
+    return res.json({
+      redirect: '/',
+    });
   });
 };
 
 const logout = (request, response) => {
   request.session.destroy();
-  response.redirect('/donate');
+  response.redirect('/login');
 };
 
 const signup = (request, response) => {
@@ -40,10 +48,14 @@ const signup = (request, response) => {
   req.body.pass2 = `${req.body.pass2}`;
 
   if (!req.body.username || !req.body.pass1 || !req.body.pass2) {
-    return res.status(400).json({ error: 'Please fill out all fields.' });
+    return res.status(400).json({
+      error: 'Please fill out all fields.',
+    });
   }
   if (req.body.pass1 !== req.body.pass2) {
-    return res.status(400).json({ error: 'The passwords do not match' });
+    return res.status(400).json({
+      error: 'The passwords do not match',
+    });
   }
 
   return Account.AccountModel.genHash(req.body.pass1, (salt, hash) => {
@@ -57,14 +69,20 @@ const signup = (request, response) => {
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      return res.json({ redirect: '/' });
+      return res.json({
+        redirect: '/',
+      });
     });
     savePromise.catch((err) => {
       console.log(err);
       if (err.code === 11000) {
-        return res.status(400).json({ error: 'Username taken, try again' });
+        return res.status(400).json({
+          error: 'Username taken, try again',
+        });
       }
-      return res.status(400).json({ error: 'An error has occurred' });
+      return res.status(400).json({
+        error: 'An error has occurred',
+      });
     });
   });
 };
@@ -80,33 +98,64 @@ const changePass = (request, response) => {
 
   // Check for empty fields
   if (!req.body.pass || !req.body.diffPass1 || !req.body.diffPass2) {
-    return res.status(400).json({ error: 'Please fill out all fields' });
+    return res.status(400).json({
+      error: 'Please fill out all fields',
+    });
   }
   // Check if original password matches
-  const userInfo = Account.AccountModel.authenticate(req.session.account.username, req.body.pass,
-    (err, account) => account);
-  if (!userInfo) {
-    return res.status(401).json({ error: 'Wrong username/password' });
-  }
-  // Check for password confirmation
-  if (req.body.diffPass1 !== req.body.diffPass2) {
-    return res.status(400).json({ error: 'Your new passwords do not match' });
-  }
-  // Passed all checks, so change the password
-  return Account.AccountModel.genHash(req.body.diffPass1, (salt, hash) => {
-    userInfo.salt = salt;
-    userInfo.password = hash;
-    const savePromise = userInfo.save();
-
-    savePromise.then(() => {
-      req.session.account = Account.AccountModel.toAPI(userInfo);
-      return res.json({ redirect: '/editor' });
+  return Account.AccountModel.authenticate(req.session.account.username, req.body.pass,
+    (err, account) => {
+      if (err || !account) {
+        return res.status(401).json({
+          error: 'Wrong username/password',
+        });
+      }
+      // Check for password confirmation
+      if (req.body.diffPass1 !== req.body.diffPass2) {
+        return res.status(400).json({
+          error: 'Your new passwords do not match',
+        });
+      }
+      // Passed all checks, so change the password
+      return Account.AccountModel.findById(req.session.account._id,
+        (addErr, doc) => {
+          if (addErr) {
+            console.log(addErr);
+            return res.status(400).json({
+              error: 'An error has occurred',
+            });
+          }
+          return Account.AccountModel.genHash(req.body.diffPass1, (salt, hash) => {
+            const newData = doc;
+            newData.salt = salt;
+            newData.password = hash;
+            const savePromise = newData.save();
+            savePromise.then(() => {
+              req.session.account = Account.AccountModel.toAPI(newData);
+            });
+            console.log(doc);
+            console.log(newData);
+            console.log(salt);
+            console.log(hash);
+            return res.json({
+              redirect: '/app',
+            });
+          });
+        });
+      /*       const savePromise = userAccount.save();
+            savePromise.then(() => {
+              req.session.account = Account.AccountModel.toAPI(userAccount);
+              return res.json({
+                redirect: '/app',
+              });
+            });
+            savePromise.catch((addErr) => {
+              console.log(addErr);
+              return res.status(400).json({
+                error: 'An error has occurred.',
+              });
+            }); */
     });
-    savePromise.catch((err) => {
-      console.log(err);
-      return res.status(400).json({ error: 'An error has occurred.' });
-    });
-  });
 };
 
 const getToken = (request, response) => {

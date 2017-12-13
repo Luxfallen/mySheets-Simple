@@ -86,11 +86,11 @@ nav {
   #draw input {
     z-index: 2; }
 
-.bpList h1 {
+.listItem h1 {
   color: red;
   display: inline-block;
   width: 1.5em; }
 
-.bpList h3 {
+.listItem h2 h3 {
   display: inline-block;
   width: 20vw; }

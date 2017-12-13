@@ -2,6 +2,13 @@
 
 /* eslint-disable */
 
+/**---------------------------- ATTN -----------------------------------
+ * This still is not fully operational, and further edits must be made.
+ * Ctrl+F the word 'EDIT' to find such situations.
+ * Testing must go on thereafter
+ * ---------------------------------------------------------------------
+ */
+
 // Helper Methods
 //region
 var handleError = function handleError(message) {
@@ -29,16 +36,10 @@ var sendAjax = function sendAjax(type, action, data, success) {
     }
   });
 };
-
-var measureOffset = function measureOffset(w, h) {
-  var offset = {};
-  offset.w = $(window).width() * w;
-  offset.h = $(window).height() * h;
-  return offset;
-};
 //endregion
 
 // Donate
+//region
 var DonateWindow = function DonateWindow(props) {
   return React.createElement(
     'div',
@@ -84,8 +85,10 @@ var handleDonate = function handleDonate(e) {
   parsedValue = parseFloat(parsedValue);
   handleError('Thank you for donating $' + parsedValue + '!');
 };
+//endregion
 
 // About
+//region
 var AboutWindow = function AboutWindow(props) {
   return React.createElement(
     'div',
@@ -166,121 +169,298 @@ var AboutWindow = function AboutWindow(props) {
 var createAboutWindow = function createAboutWindow() {
   ReactDOM.render(React.createElement(AboutWindow, null), document.querySelector('#content'));
 };
+//endregion
 
-// React (Blueprint)
+// EDIT
+// EncounterCalculator
+var CalcWindow = function CalcWindow() {};
+
+var createCalcWindow = function createCalcWindow() {
+  ReactDOM.render(React.createElement(CalcWindow, null), document.querySelector('#content'));
+};
+
+var handleCalc = function handleCalc() {};
+
+// React (Character)
 //region
-var BlueprintForm = function BlueprintForm(props) {
+var CharForm = function CharForm(props) {
   return React.createElement(
     'form',
-    { id: 'bpForm', onSubmit: handleNewBp, name: 'bpForm', action: '/editor', method: 'POST', className: 'form' },
+    { id: 'charForm', name: 'charForm', onSubmit: handleNewChar, action: '/newChar', method: 'POST', className: 'form' },
     React.createElement(
       'label',
-      { htmlFor: 'name' },
+      { htmlFor: 'charName' },
       'Name: '
     ),
-    React.createElement('input', { id: 'name', type: 'text', name: 'name', placeholder: 'Blueprint Name' }),
-    React.createElement('input', { type: 'hidden', id: 'csrf', name: '_csrf', value: props.csrf }),
-    React.createElement('input', { id: 'bpCreate', type: 'submit', value: '+ New' })
+    React.createElement('input', { id: 'charName', type: 'text', name: 'charName', placeholder: 'Name' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'level' },
+      'Level: '
+    ),
+    React.createElement('input', { id: 'level', type: 'number', name: 'level', placeholder: '0', min: '1', max: '25' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'class' },
+      'Class: '
+    ),
+    React.createElement('input', { id: 'class', type: 'text', name: 'class', placeholder: 'Fighter (Champion)' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'str' },
+      'STR: '
+    ),
+    React.createElement('input', { className: 'stat', type: 'number', name: 'str', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'dex' },
+      'DEX: '
+    ),
+    React.createElement('input', { className: 'stat', type: 'number', name: 'dex', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'con' },
+      'CON: '
+    ),
+    React.createElement('input', { className: 'stat', type: 'number', name: 'con', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'int' },
+      'INT: '
+    ),
+    React.createElement('input', { className: 'stat', type: 'number', name: 'int', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'wis' },
+      'WIS: '
+    ),
+    React.createElement('input', { className: 'stat', type: 'number', name: 'wis', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'cha' },
+      'CHA: '
+    ),
+    React.createElement('input', { className: 'stat', type: 'number', name: 'cha', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('br', null),
+    React.createElement(
+      'label',
+      { htmlFor: 'maxHealth' },
+      'Max Health: '
+    ),
+    React.createElement('input', { className: 'health', type: 'number', name: 'maxHealth', placeholder: '0', min: '1' }),
+    React.createElement('br', null),
+    React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+    React.createElement('input', { className: 'formSubmit', type: 'submit', value: '+ Character' })
   );
 };
 
-var BlueprintList = function BlueprintList(props) {
-  if (props.blueprints.length === 0) {
+// Need inventory block
+// Need save button
+// Need buttons to edit values
+var CharData = function CharData(props) {
+  return React.createElement(
+    'div',
+    { id: 'charData' },
+    React.createElement(
+      'h1',
+      null,
+      props.character.name
+    ),
+    React.createElement(
+      'h2',
+      null,
+      props.character.level,
+      ', ',
+      props.character.class
+    ),
+    React.createElement(
+      'ul',
+      { id: 'statBlock' },
+      React.createElement(
+        'li',
+        { className: 'stat' },
+        'STR: ',
+        props.character.stats[0]
+      ),
+      React.createElement(
+        'li',
+        { className: 'stat' },
+        'DEX: ',
+        props.character.stats[1]
+      ),
+      React.createElement(
+        'li',
+        { className: 'stat' },
+        'CON: ',
+        props.character.stats[2]
+      ),
+      React.createElement(
+        'li',
+        { className: 'stat' },
+        'INT: ',
+        props.character.stats[3]
+      ),
+      React.createElement(
+        'li',
+        { className: 'stat' },
+        'WIS: ',
+        props.character.stats[4]
+      ),
+      React.createElement(
+        'li',
+        { className: 'stat' },
+        'CHA: ',
+        props.character.stats[5]
+      )
+    ),
+    React.createElement(
+      'ul',
+      { id: 'healthBlock' },
+      React.createElement(
+        'li',
+        null,
+        'Temporary HP: ',
+        props.character.health[1]
+      ),
+      React.createElement(
+        'li',
+        null,
+        'Current HP: ',
+        props.character.health[0]
+      ),
+      React.createElement(
+        'li',
+        null,
+        'Max HP: ',
+        props.character.health[2]
+      )
+    ),
+    React.createElement('ul', { id: 'inventoryBlock' })
+  );
+};
+
+var CharList = function CharList(props) {
+  if (props.characters.length === 0) {
     React.createElement(
       'div',
-      { 'class': 'bpListItem', 'data-key': 'null' },
+      { 'class': 'listItem', 'data-key': 'null' },
       React.createElement(
         'h3',
         { 'class': 'emptyItem' },
-        'No Blueprints'
+        'No Characters'
       )
     );
   }
-  var bpNodes = props.blueprints.map(function (blueprint) {
-    if (blueprint.walls) {
-      blueprint.walls = btoa(blueprint.walls);
-      var img = document.createElement('img');
-      img.src = blueprint.walls;
-      img.width = "800";
-      img.height = "500";
-      document.body.appendChild(img);
-    }
+  var charItems = props.characters.map(function (character) {
     return React.createElement(
       'div',
-      { 'class': 'bpListItem', 'data-key': blueprint._id, 'data-walls': blueprint.walls },
+      { 'class': 'listItem', 'data-key': character._id, onClick: handleChar },
       React.createElement(
         'h1',
-        { 'class': 'bpDelete', onClick: handleBlueprintDel },
+        { 'class': 'delChar', onClick: handleCharDel },
         ' X '
       ),
       React.createElement(
+        'h2',
+        { 'class': 'name' },
+        character.name
+      ),
+      React.createElement(
         'h3',
-        { 'class': 'bpNodeName', onClick: handleBlueprint },
-        blueprint.name
-      )
+        { 'class': 'lvlClass' },
+        '(',
+        character.level,
+        ') ',
+        character.class
+      ),
+      React.createElement('var', {
+        'data-all': JSON.stringify(character),
+        style: 'visibility:\'hidden\''
+      })
     );
   });
   return React.createElement(
     'div',
-    { className: 'bpList' },
-    bpNodes
+    { className: 'list' },
+    charItems
   );
 };
 
-// Remember to make the border white and background medium blue
-var BlueprintCanvas = function BlueprintCanvas(props) {
-  return React.createElement(
-    'div',
-    { id: 'editBp' },
-    React.createElement('canvas', { id: 'bpRearCanvas', width: '800', height: '500' }),
-    React.createElement('canvas', { id: 'bpCanvas', 'data-lastPt': '{}', width: '800', height: '500', onClick: handleDraw, onMouseMove: handlePreview }),
-    React.createElement('input', { id: 'saveButton', type: 'button', 'data-key': props.myKey || "{}", value: 'Save', onClick: saveBlueprint })
-  );
+var createCharForm = function createCharForm(csrf) {
+  ReactDOM.render(React.createElement(CharForm, { csrf: csrf }), document.querySelector('#genChar'));
 };
+
+var createCharData = function createCharData(csrf, character) {
+  ReactDOM.render(React.createElement(CharData, { csrf: csrf, character: character }), document.querySelector('#genChar'));
+};
+
+var createCharList = function createCharList(characters) {
+  ReactDOM.render(React.createElement(CharList, { characters: characters }), document.querySelector('#list'));
+};
+
 //endregion
 
-// Blueprint Handling
+// Character Handling
 //region
-var loadBlueprints = function loadBlueprints() {
-  sendAjax('GET', '/getBp', null, function (data) {
-    ReactDOM.render(React.createElement(BlueprintList, { blueprints: data.blueprints }), document.querySelector("#bps"));
+var loadChar = function loadChar() {
+  sendAjax('GET', '/getChar', null, function (data) {
+    ReactDOM.render(React.createElement(CharList, { characters: data.characters }), document.querySelector("#charList"));
   });
 };
 
-var handleNewBp = function handleNewBp(e) {
+var handleNewChar = function handleNewChar(e) {
   e.preventDefault();
   $("#displayMessage").animate({ left: 'hide' }, 500);
 
-  if (document.querySelector('#name').value === '') {
-    handleError("Your blueprint needs a name");
+  if (document.querySelector('#charName').value === '') {
+    handleError("Your character needs a name");
     return false;
   }
 
-  sendAjax('POST', document.querySelector("#bpForm").getAttribute("action"), $("#bpForm").serialize(), function () {
-    loadBlueprints();
+  var inputHealth = document.querySelector('#maxHealth').value;
+  var tempForm = document.querySelector('#charForm');
+
+  var formResult = {
+    name: document.querySelector('#charName').value,
+    level: document.querySelector('#level').value,
+    class: document.querySelector('#class').value,
+    stats: document.querySelectorAll('.stat').value,
+    health: [inputHealth, 0, inputHealth],
+    inventory: []
+  };
+  // Check for alternative to .serialize()
+  sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), formResult.serialize(), function () {
+    loadChar();
   });
   return false;
 };
 
-var saveBlueprint = function saveBlueprint(e) {
-  var canvas = document.querySelector('#bpRearCanvas');
-  var ctx = canvas.getContext("2d");
-  var walls = canvas.toDataURL();
-
+// Check for alternative to .serialize()
+var saveChar = function saveChar(e) {
   var key = e.target.getAttribute('data-key');
   var token = $('#csrf').serialize();
-  var obj = '_id=' + key + '&' + token + '&walls=' + walls;
-  sendAjax('POST', '/editor', obj, function (msg) {
-    //handleError(msg);
+  var obj = '_id=' + key + '&' + token + '&';
+  sendAjax('POST', '/save', $('#charData').serialize(), function (msg) {
+    handleError(msg);
   });
 };
 
-var handleBlueprint = function handleBlueprint(e) {
+// EDIT
+// 
+var handleChar = function handleChar(e) {
   if (e.target !== 'div') {
     e.target = e.target.parentElement;
   }
   var key = e.target.getAttribute('data-key');
-
+  var char = JSON.parse(e.target.getAttribute('data-all'));
   ReactDOM.render(React.createElement(BlueprintCanvas, { myKey: key }), document.querySelector("#draw"));
 
   var canvas = document.querySelector('#bpRearCanvas');
@@ -296,74 +476,15 @@ var handleBlueprint = function handleBlueprint(e) {
   }
 };
 
-var roundBy = function roundBy(num, val) {
-  var ans = void 0;
-  var half = Math.round(val / 2);
-  if (num % val >= half) {
-    ans = num + (val - num % val);
-  } else if (num % val < half) {
-    ans = num - num % val;
-  } else if (num % val === 0) {
-    ans = num;
-  }
-  return ans;
-};
-
-var snapTo = function snapTo(mouseX, mouseY, val) {
-  var snap = {};
-  snap.x = roundBy(mouseX, val);
-  snap.y = roundBy(mouseY, val);
-  return snap;
-};
-
-// Call onMouseMove
-var handlePreview = function handlePreview(e) {
-  var previewCanvas = document.querySelector('#bpCanvas');
-  var lastPt = JSON.parse(previewCanvas.getAttribute('data-lastPt'));
-  var previewCtx = previewCanvas.getContext("2d");
-  var offset = measureOffset(.33, .08);
-  if (lastPt.x !== '' && lastPt.y !== '') {
-    var loc = snapTo(e.pageX - offset.w, e.pageY - offset.h, 10);
-    previewCtx.strokeStyle = "#FFF";
-    previewCtx.lineWidth = 3;
-    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-    previewCtx.beginPath();
-    previewCtx.moveTo(lastPt.x, lastPt.y);
-    previewCtx.lineTo(loc.x, loc.y);
-    previewCtx.stroke();
-  }
-};
-
-// Call onClick
-var handleDraw = function handleDraw(e) {
-  var previewCanvas = document.querySelector('#bpCanvas');
-  var lastPt = JSON.parse(previewCanvas.getAttribute('data-lastPt'));
-  var rearCanvas = document.querySelector('#bpRearCanvas');
-  var rearCtx = rearCanvas.getContext("2d");
-  var offset = measureOffset(.33, .08);
-  var loc = snapTo(e.pageX - offset.w, e.pageY - offset.h, 10);
-  if (lastPt.x === '' || lastPt.y === '') {
-    lastPt.x = loc.x;lastPt.y = loc.y;
-  }
-  rearCtx.strokeStyle = "#FFF";
-  rearCtx.lineWidth = 3;
-  rearCtx.beginPath();
-  rearCtx.moveTo(lastPt.x, lastPt.y);
-  rearCtx.lineTo(loc.x, loc.y);
-  rearCtx.stroke();
-  previewCanvas.setAttribute('data-lastPt', JSON.stringify(loc));
-};
-
-var handleBlueprintDel = function handleBlueprintDel(e) {
+var handleCharDel = function handleCharDel(e) {
   var key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
   var token = $('#csrf').serialize();
   var obj = '_id=' + key + '&' + token;
-  sendAjax('DELETE', '/editor', obj, function (msg) {
+  sendAjax('DELETE', '/delChar', obj, function (msg) {
     console.dir(msg);
   });
-  document.querySelector('#draw').innerHTML = "";
   e.target.parentElement.hidden = true;
-  loadBlueprints();
+  loadChar();
 };
 //endregion
 
@@ -445,7 +566,7 @@ var ChangePassWindow = function ChangePassWindow(props) {
     ),
     React.createElement('input', { id: 'diffPass2', type: 'password', name: 'diffPass2', placeholder: 'Confirm Password' }),
     React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-    React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Sign Up' })
+    React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Change it!' })
   );
 };
 
@@ -517,7 +638,6 @@ var handleChangePass = function handleChangePass(e) {
 };
 
 var setup = function setup(csrf) {
-  var form = document.querySelector('#createBp');
   var loginButton = document.querySelector('#loginButton');
   var signupButton = document.querySelector('#signupButton');
   var changePassButton = document.querySelector('#changePassButton');
@@ -547,11 +667,6 @@ var setup = function setup(csrf) {
       return false;
     });
     createLoginWindow(csrf);
-  }
-
-  if (form) {
-    ReactDOM.render(React.createElement(BlueprintForm, { csrf: csrf }), document.querySelector("#createBp"));
-    loadBlueprints();
   }
 
   if (aboutButton) {

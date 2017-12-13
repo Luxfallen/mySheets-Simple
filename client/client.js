@@ -161,7 +161,7 @@ const handleCalc = () => {
 //region
 const CharForm = (props) => {
   return (
-    <form id="charForm" name="charForm" onSubmit={handleNewChar} action="/new" method="POST" className="form">
+    <form id="charForm" name="charForm" onSubmit={handleNewChar} action="/newChar" method="POST" className="form">
       <label htmlFor="charName">Name: </label>
       <input id="charName" type="text" name="charName" placeholder="Name"/><br/>
       <label htmlFor="level">Level: </label>
@@ -188,18 +188,21 @@ const CharForm = (props) => {
   );
 };
 
+// Need inventory block
+// Need save button
+// Need buttons to edit values
 const CharData = (props) => {
   return (
     <div id="charData">
       <h1>{props.character.name}</h1>
       <h2>{props.character.level}, {props.character.class}</h2>
       <ul id="statBlock">
-        <li>STR: {props.character.stats[0]}</li>
-        <li>DEX: {props.character.stats[1]}</li>
-        <li>CON: {props.character.stats[2]}</li>
-        <li>INT: {props.character.stats[3]}</li>
-        <li>WIS: {props.character.stats[4]}</li>
-        <li>CHA: {props.character.stats[5]}</li>
+        <li className='stat'>STR: {props.character.stats[0]}</li>
+        <li className='stat'>DEX: {props.character.stats[1]}</li>
+        <li className='stat'>CON: {props.character.stats[2]}</li>
+        <li className='stat'>INT: {props.character.stats[3]}</li>
+        <li className='stat'>WIS: {props.character.stats[4]}</li>
+        <li className='stat'>CHA: {props.character.stats[5]}</li>
       </ul>
       <ul id="healthBlock">
         <li>Temporary HP: {props.character.health[1]}</li>
@@ -220,10 +223,14 @@ const CharList = (props) => {
   }
   const charItems = props.characters.map((character) => {
     return (
-      <div class="listItem" data-key={character._id}>
+      <div class="listItem" data-key={character._id} onClick={handleChar}>
         <h1 class="delChar" onClick={handleCharDel}> X </h1>
-        <h2 class="charName" onClick={}>{character.name}</h2>
-        <h3 class="charClass" onClick={}>({character.level}) {character.class}</h3>
+        <h2 class="name">{character.name}</h2>
+        <h3 class="lvlClass">({character.level}) {character.class}</h3>
+        <var 
+          data-all={JSON.stringify(character)}
+          style="visibility:'hidden'"
+        ></var>
       </div>
     );
   });
@@ -239,21 +246,21 @@ const createCharForm = (csrf) => {
     <CharForm csrf={csrf} />,
     document.querySelector('#genChar')
   );
-}
+};
 
 const createCharData = (csrf, character) => {
   ReactDOM.render(
     <CharData csrf={csrf} character={character} />,
     document.querySelector('#genChar')
   );
-}
+};
 
 const createCharList = (characters) => {
   ReactDOM.render(
     <CharList characters={characters} />,
     document.querySelector('#list')
   );
-}
+};
 
 //endregion
 
@@ -289,7 +296,7 @@ const handleNewChar = (e) => {
   };
   // Check for alternative to .serialize()
   sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), formResult.serialize(), () => {
-    loadChars();
+    loadChar();
   });
   return false;
 };
@@ -298,19 +305,20 @@ const handleNewChar = (e) => {
 const saveChar = (e) => {
   const key = e.target.getAttribute('data-key');
   const token = $('#csrf').serialize();
-  const obj = `_id=${key}&${token}&walls=${walls}`;
+  const obj = `_id=${key}&${token}&`;
   sendAjax('POST', '/save', $('#charData').serialize(), (msg) => {
     handleError(msg);
   });
-}
+};
 
 // EDIT
-const handleBlueprint = (e) => {
+// 
+const handleChar = (e) => {
   if (e.target !== 'div') {
     e.target = e.target.parentElement;
   }
   let key = e.target.getAttribute('data-key');
-
+  let char = JSON.parse(e.target.getAttribute('data-all'));
   ReactDOM.render(
     <BlueprintCanvas myKey={key} />, document.querySelector("#draw")
   );
@@ -328,17 +336,15 @@ const handleBlueprint = (e) => {
   }
 };
 
-// EDIT
 const handleCharDel = (e) => {
   const key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
   const token = $('#csrf').serialize();
   const obj = `_id=${key}&${token}`;
-  sendAjax('DELETE', '/editor', obj, (msg) => {
+  sendAjax('DELETE', '/delChar', obj, (msg) => {
     console.dir(msg);
   });
-  document.querySelector('#draw').innerHTML = "";
   e.target.parentElement.hidden = true;
-  loadBlueprints();
+  loadChar();
 };
 //endregion
 
@@ -387,7 +393,7 @@ const ChangePassWindow = (props) => {
     <label htmlFor="diffPass2">Confirm Password: </label>
     <input id="diffPass2" type="password" name="diffPass2" placeholder="Confirm Password"/>
     <input type="hidden" name="_csrf" value={props.csrf}/>
-    <input className="formSubmit" type="submit" value="Sign Up"/>
+    <input className="formSubmit" type="submit" value="Change it!"/>
   </form>
   );
 }
@@ -476,7 +482,6 @@ const handleChangePass = (e) => {
 };
 
 const setup = (csrf) => {
-  // const form = document.querySelector('#');
   const loginButton = document.querySelector('#loginButton');
   const signupButton = document.querySelector('#signupButton');
   const changePassButton = document.querySelector('#changePassButton');
@@ -507,14 +512,7 @@ const setup = (csrf) => {
     });
     createLoginWindow(csrf);
   }
-  /*
-  if (form) {
-    ReactDOM.render(
-      <BlueprintForm csrf={csrf} />, document.querySelector("#createBp")
-    );
-    loadBlueprints();
-  }
-  */
+
   if (aboutButton) {
     aboutButton.addEventListener('click', (e) => {
       e.preventDefault();
