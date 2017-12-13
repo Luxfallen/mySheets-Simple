@@ -27,6 +27,7 @@ const CharacterSchema = new mongoose.Schema({
   stats: {
     type: [Number],
     required: true,
+    default: [10, 10, 10, 10, 10, 10],
   },
   // Current, Max, Temp
   health: {

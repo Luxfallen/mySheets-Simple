@@ -7,6 +7,6 @@ const renderAbout = (req, res) => {
 };
 
 module.exports.Account = require('./Account.js');
-module.exports.Blueprint = require('./Blueprint.js');
+module.exports.Character = require('./Character.js');
 module.exports.renderDonate = renderDonate;
 module.exports.renderAbout = renderAbout;

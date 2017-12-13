@@ -1,5 +1,12 @@
 /* eslint-disable */
 
+/**---------------------------- ATTN -----------------------------------
+ * This still is not fully operational, and further edits must be made.
+ * Ctrl+F the word 'EDIT' to find such situations.
+ * Testing must go on thereafter
+ * ---------------------------------------------------------------------
+ */
+
 // Helper Methods
 //region
 const handleError = (message) => {
@@ -30,6 +37,7 @@ const sendAjax = (type, action, data, success) => {
 //endregion
 
 // Donate
+//region
 const DonateWindow = (props) => {
   return (
     <div id="donateWindow">
@@ -64,8 +72,10 @@ const handleDonate = (e) => {
   parsedValue = parseFloat(parsedValue);
   handleError(`Thank you for donating $${parsedValue}!`);
 };
+//endregion
 
 // About
+//region
 const AboutWindow = (props) => {
   return (
     <div id="documentation">
@@ -128,67 +138,131 @@ const createAboutWindow = () => {
     document.querySelector('#content')
   );
 };
+//endregion
 
-// React (Blueprint)
+// EDIT
+// EncounterCalculator
+const CalcWindow = () => {
+
+};
+
+const createCalcWindow = () => {
+  ReactDOM.render(
+    <CalcWindow />,
+    document.querySelector('#content')
+  );
+};
+
+const handleCalc = () => {
+
+};
+
+// React (Character)
 //region
-const BlueprintForm = (props) => {
+const CharForm = (props) => {
   return (
-    <form id="bpForm" onSubmit={handleNewBp} name="bpForm" action="/editor" method="POST" className="form">
-      <label htmlFor="name">Name: </label>
-      <input id="name" type="text" name="name" placeholder="Blueprint Name"/>
-      <input type="hidden" id="csrf" name="_csrf" value={props.csrf}/>
-      <input id="bpCreate" type="submit" value="+ New"/>
+    <form id="charForm" name="charForm" onSubmit={handleNewChar} action="/new" method="POST" className="form">
+      <label htmlFor="charName">Name: </label>
+      <input id="charName" type="text" name="charName" placeholder="Name"/><br/>
+      <label htmlFor="level">Level: </label>
+      <input id="level" type="number" name="level" placeholder="0" min="1" max="25"/><br/>
+      <label htmlFor="class">Class: </label>
+      <input id="class" type="text" name="class" placeholder="Fighter (Champion)" /><br/>
+      <label htmlFor="str">STR: </label>
+      <input className="stat" type="number" name="str" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="dex">DEX: </label>
+      <input className="stat" type="number" name="dex" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="con">CON: </label>
+      <input className="stat" type="number" name="con" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="int">INT: </label>
+      <input className="stat" type="number" name="int" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="wis">WIS: </label>
+      <input className="stat" type="number" name="wis" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="cha">CHA: </label>
+      <input className="stat" type="number" name="cha" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="maxHealth">Max Health: </label>
+      <input className="health" type="number" name="maxHealth" placeholder="0" min="1" /><br/>
+      <input type="hidden" name="_csrf" value={props.csrf}/>
+      <input className="formSubmit" type="submit" value="+ Character"/>
     </form>
   );
 };
 
-const BlueprintList = (props) => {
-  if (props.blueprints.length === 0) {
-    <div class="bpListItem" data-key='null'>
-      <h3 class="emptyItem">No Blueprints</h3>
+const CharData = (props) => {
+  return (
+    <div id="charData">
+      <h1>{props.character.name}</h1>
+      <h2>{props.character.level}, {props.character.class}</h2>
+      <ul id="statBlock">
+        <li>STR: {props.character.stats[0]}</li>
+        <li>DEX: {props.character.stats[1]}</li>
+        <li>CON: {props.character.stats[2]}</li>
+        <li>INT: {props.character.stats[3]}</li>
+        <li>WIS: {props.character.stats[4]}</li>
+        <li>CHA: {props.character.stats[5]}</li>
+      </ul>
+      <ul id="healthBlock">
+        <li>Temporary HP: {props.character.health[1]}</li>
+        <li>Current HP: {props.character.health[0]}</li>
+        <li>Max HP: {props.character.health[2]}</li>
+      </ul>
+      <ul id="inventoryBlock">
+      </ul>
+    </div>
+  );
+};
+
+const CharList = (props) => {
+  if (props.characters.length === 0) {
+    <div class="listItem" data-key='null'>
+      <h3 class="emptyItem">No Characters</h3>
     </div>
   }
-  const bpNodes = props.blueprints.map((blueprint) => {
-    if(blueprint.walls) {
-      blueprint.walls = btoa(blueprint.walls);
-      var img = document.createElement('img');
-      img.src = blueprint.walls;
-      img.width = "800";
-      img.height = "500";
-      document.body.appendChild(img);
-    }
+  const charItems = props.characters.map((character) => {
     return (
-      <div class="bpListItem" data-key={blueprint._id} data-walls={blueprint.walls}>
-        <h1 class="bpDelete" onClick={handleBlueprintDel}> X </h1>
-        <h3 class="bpNodeName" onClick={handleBlueprint}>{blueprint.name}</h3>
+      <div class="listItem" data-key={character._id}>
+        <h1 class="delChar" onClick={handleCharDel}> X </h1>
+        <h2 class="charName" onClick={}>{character.name}</h2>
+        <h3 class="charClass" onClick={}>({character.level}) {character.class}</h3>
       </div>
     );
   });
   return (
-    <div className="bpList">
-      {bpNodes}
+    <div className="list">
+      {charItems}
     </div>
   );
 };
 
-// Remember to make the border white and background medium blue
-const BlueprintCanvas = (props) => {
-  return (
-    <div id="editBp">
-      <canvas id="bpRearCanvas" width="800" height="500"></canvas>
-      <canvas id="bpCanvas" data-lastPt="{}" width="800" height="500" onClick={handleDraw} onMouseMove={handlePreview}></canvas>
-      <input id="saveButton" type="button" data-key={props.myKey || "{}"} value="Save" onClick={saveBlueprint} />
-    </div>
+const createCharForm = (csrf) => {
+  ReactDOM.render(
+    <CharForm csrf={csrf} />,
+    document.querySelector('#genChar')
   );
-};
+}
+
+const createCharData = (csrf, character) => {
+  ReactDOM.render(
+    <CharData csrf={csrf} character={character} />,
+    document.querySelector('#genChar')
+  );
+}
+
+const createCharList = (characters) => {
+  ReactDOM.render(
+    <CharList characters={characters} />,
+    document.querySelector('#list')
+  );
+}
+
 //endregion
 
-// Blueprint Handling
+// Character Handling
 //region
-const loadBlueprints = () => {
-  sendAjax('GET', '/getBp', null, (data) => {
+const loadChar = () => {
+  sendAjax('GET', '/getChar', null, (data) => {
     ReactDOM.render(
-      <BlueprintList blueprints={data.blueprints}/>, document.querySelector("#bps")
+      <CharList characters={data.characters}/>, document.querySelector("#charList")
     );
   });
 };
@@ -197,30 +271,40 @@ const handleNewChar = (e) => {
   e.preventDefault();
   $("#displayMessage").animate({left:'hide'}, 500);
 
-  if(document.querySelector('#name').value === '') {
+  if(document.querySelector('#charName').value === '') {
     handleError("Your character needs a name");
     return false;
   }
 
-  sendAjax('POST', document.querySelector("#bpForm").getAttribute("action"), $("#bpForm").serialize(), () => {
-    loadBlueprints();
+  const inputHealth = document.querySelector('#maxHealth').value;
+  const tempForm = document.querySelector('#charForm');
+
+  const formResult = {
+    name: document.querySelector('#charName').value,
+    level: document.querySelector('#level').value,
+    class: document.querySelector('#class').value,
+    stats: document.querySelectorAll('.stat').value,
+    health: [inputHealth,0,inputHealth],
+    inventory: [],
+  };
+  // Check for alternative to .serialize()
+  sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), formResult.serialize(), () => {
+    loadChars();
   });
   return false;
 };
 
-/* const saveBlueprint = (e) => {
-  const canvas = document.querySelector('#bpRearCanvas');
-  const ctx = canvas.getContext("2d");
-  const walls = canvas.toDataURL();
-
+// Check for alternative to .serialize()
+const saveChar = (e) => {
   const key = e.target.getAttribute('data-key');
   const token = $('#csrf').serialize();
   const obj = `_id=${key}&${token}&walls=${walls}`;
-  sendAjax('POST', '/editor', obj, (msg) => {
-    //handleError(msg);
+  sendAjax('POST', '/save', $('#charData').serialize(), (msg) => {
+    handleError(msg);
   });
 }
 
+// EDIT
 const handleBlueprint = (e) => {
   if (e.target !== 'div') {
     e.target = e.target.parentElement;
@@ -244,63 +328,8 @@ const handleBlueprint = (e) => {
   }
 };
 
-const roundBy = (num, val) => {
-  let ans;
-  const half = Math.round(val/2);
-  if (num % val >= half) {
-    ans = (num + (val-(num % val)));
-  } else if (num % val < half) {
-    ans = (num - (num % val));
-  } else if (num % val === 0) {
-    ans = num;
-  }
-  return ans;
-};
-
-const snapTo = (mouseX, mouseY, val) => {
-  let snap = {};
-  snap.x = roundBy(mouseX, val);
-  snap.y = roundBy(mouseY, val);
-  return snap;
-};
-
-// Call onMouseMove
-const handlePreview = (e) => {
-  const previewCanvas = document.querySelector('#bpCanvas');
-  const lastPt = JSON.parse(previewCanvas.getAttribute('data-lastPt'));
-  const previewCtx = previewCanvas.getContext("2d");
-  const offset = measureOffset(.33, .08);
-  if (lastPt.x !== '' && lastPt.y !=='') {
-    const loc = snapTo(e.pageX - offset.w, e.pageY - offset.h, 10);
-    previewCtx.strokeStyle="#FFF";
-    previewCtx.lineWidth = 3;    
-    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-    previewCtx.beginPath();
-    previewCtx.moveTo(lastPt.x, lastPt.y);
-    previewCtx.lineTo(loc.x, loc.y);
-    previewCtx.stroke();
-  }
-};
-
-// Call onClick
-const handleDraw = (e) => {
-  const previewCanvas = document.querySelector('#bpCanvas');
-  const lastPt = JSON.parse(previewCanvas.getAttribute('data-lastPt'));
-  const rearCanvas = document.querySelector('#bpRearCanvas')
-  const rearCtx = rearCanvas.getContext("2d");
-  const offset = measureOffset(.33, .08);
-  const loc = snapTo(e.pageX - offset.w, e.pageY - offset.h, 10);
-  if (lastPt.x === '' || lastPt.y === '') {lastPt.x = loc.x; lastPt.y = loc.y;}
-  rearCtx.strokeStyle = "#FFF";
-  rearCtx.lineWidth = 3;
-  rearCtx.beginPath();
-  rearCtx.moveTo(lastPt.x, lastPt.y);
-  rearCtx.lineTo(loc.x, loc.y);
-  rearCtx.stroke();
-  previewCanvas.setAttribute('data-lastPt', JSON.stringify(loc));
-};
-
-const handleBlueprintDel = (e) => {
+// EDIT
+const handleCharDel = (e) => {
   const key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
   const token = $('#csrf').serialize();
   const obj = `_id=${key}&${token}`;
@@ -310,7 +339,7 @@ const handleBlueprintDel = (e) => {
   document.querySelector('#draw').innerHTML = "";
   e.target.parentElement.hidden = true;
   loadBlueprints();
-}; */
+};
 //endregion
 
 // React (Login)
