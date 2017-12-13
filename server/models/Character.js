@@ -58,7 +58,8 @@ CharacterSchema.statics.toAPI = (doc) => ({
 
 CharacterSchema.statics.findByOwner = (ownerId, callback) => {
   const search = { owner: convertId(ownerId) };
-  return CharacterModel.find(search).select('name stats health inventory').exec(callback);
+  return CharacterModel.find(search).select('name level class stats health inventory')
+    .exec(callback);
 };
 
 CharacterModel = mongoose.model('Character', CharacterSchema);

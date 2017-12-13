@@ -65,6 +65,8 @@ var DonateWindow = function DonateWindow(props) {
 };
 
 var createDonateWindow = function createDonateWindow() {
+  document.querySelector('#genChar').innerHTML = '';
+  document.querySelector('#charList').innerHTML = '';
   ReactDOM.render(React.createElement(DonateWindow, null), document.querySelector('#content'));
 };
 
@@ -167,19 +169,30 @@ var AboutWindow = function AboutWindow(props) {
 };
 
 var createAboutWindow = function createAboutWindow() {
+  document.querySelector('#genChar').innerHTML = '';
+  document.querySelector('#charList').innerHTML = '';
   ReactDOM.render(React.createElement(AboutWindow, null), document.querySelector('#content'));
 };
 //endregion
 
-// EDIT
+/* // EDIT
 // EncounterCalculator
-var CalcWindow = function CalcWindow() {};
-
-var createCalcWindow = function createCalcWindow() {
-  ReactDOM.render(React.createElement(CalcWindow, null), document.querySelector('#content'));
+const CalcWindow = () => {
+  
 };
 
-var handleCalc = function handleCalc() {};
+const createCalcWindow = () => {
+  document.querySelector('#genChar').innerHTML = '';
+  document.querySelector('#charList').innerHTML = '';
+  ReactDOM.render(
+    <CalcWindow />,
+    document.querySelector('#content')
+  );
+};
+
+const handleCalc = () => {
+
+}; */
 
 // React (Character)
 //region
@@ -189,10 +202,10 @@ var CharForm = function CharForm(props) {
     { id: 'charForm', name: 'charForm', onSubmit: handleNewChar, action: '/newChar', method: 'POST', className: 'form' },
     React.createElement(
       'label',
-      { htmlFor: 'charName' },
+      { htmlFor: 'name' },
       'Name: '
     ),
-    React.createElement('input', { id: 'charName', type: 'text', name: 'charName', placeholder: 'Name' }),
+    React.createElement('input', { id: 'name', type: 'text', name: 'name', placeholder: 'Name' }),
     React.createElement('br', null),
     React.createElement(
       'label',
@@ -213,137 +226,185 @@ var CharForm = function CharForm(props) {
       { htmlFor: 'str' },
       'STR: '
     ),
-    React.createElement('input', { className: 'stat', type: 'number', name: 'str', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30' }),
     React.createElement('br', null),
     React.createElement(
       'label',
       { htmlFor: 'dex' },
       'DEX: '
     ),
-    React.createElement('input', { className: 'stat', type: 'number', name: 'dex', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30' }),
     React.createElement('br', null),
     React.createElement(
       'label',
       { htmlFor: 'con' },
       'CON: '
     ),
-    React.createElement('input', { className: 'stat', type: 'number', name: 'con', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30' }),
     React.createElement('br', null),
     React.createElement(
       'label',
       { htmlFor: 'int' },
       'INT: '
     ),
-    React.createElement('input', { className: 'stat', type: 'number', name: 'int', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30' }),
     React.createElement('br', null),
     React.createElement(
       'label',
       { htmlFor: 'wis' },
       'WIS: '
     ),
-    React.createElement('input', { className: 'stat', type: 'number', name: 'wis', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30' }),
     React.createElement('br', null),
     React.createElement(
       'label',
       { htmlFor: 'cha' },
       'CHA: '
     ),
-    React.createElement('input', { className: 'stat', type: 'number', name: 'cha', placeholder: '10', min: '1', max: '30' }),
+    React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30' }),
     React.createElement('br', null),
     React.createElement(
       'label',
-      { htmlFor: 'maxHealth' },
+      { htmlFor: 'health' },
       'Max Health: '
     ),
-    React.createElement('input', { className: 'health', type: 'number', name: 'maxHealth', placeholder: '0', min: '1' }),
+    React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '1' }),
     React.createElement('br', null),
-    React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+    React.createElement('input', { type: 'hidden', id: 'csrf', name: '_csrf', value: props.csrf }),
     React.createElement('input', { className: 'formSubmit', type: 'submit', value: '+ Character' })
   );
 };
 
 // Need inventory block
-// Need save button
-// Need buttons to edit values
 var CharData = function CharData(props) {
-  return React.createElement(
-    'div',
-    { id: 'charData' },
+  return (
+    /*
+    <div id="charData" data-all={JSON.stringify(props.character)}>
+      <h1>{props.character.name}</h1>
+      <h2>(Level {props.character.level}) {props.character.class}</h2>
+      <ul id="statBlock">
+        <li className='stat'>STR: {props.character.stats[0]}
+          <button type="button" onClick={()=>{
+            const locale = document.querySelector('#charData');
+            let data = JSON.parse(locale.getAttribute('data-all'));
+            data.stats[0]++;
+            locale.setAttribute('data-all', JSON.stringify(data));
+            saveChar()
+          }}>+</button>
+        </li>
+        <li className='stat'>DEX: {props.character.stats[1]}</li>
+        <li className='stat'>CON: {props.character.stats[2]}</li>
+        <li className='stat'>INT: {props.character.stats[3]}</li>
+        <li className='stat'>WIS: {props.character.stats[4]}</li>
+        <li className='stat'>CHA: {props.character.stats[5]}</li>
+      </ul>
+      <ul id="healthBlock">
+        <li>Temporary HP: {props.character.health[1]}</li>
+        <li>Current HP: {props.character.health[0]}</li>
+        <li>Max HP: {props.character.health[2]}</li>
+      </ul>
+      <ul id="inventoryBlock">
+      </ul>
+      <button type="button" onClick={saveChar} data-key={props.character._id}>Save Changes</button>
+    </div>
+    */
     React.createElement(
-      'h1',
-      null,
-      props.character.name
-    ),
-    React.createElement(
-      'h2',
-      null,
-      props.character.level,
-      ', ',
-      props.character.class
-    ),
-    React.createElement(
-      'ul',
-      { id: 'statBlock' },
+      'form',
+      { id: 'charData', name: 'charData', onSubmit: saveChar, action: '/saveChar', method: 'POST', className: 'form', 'data-all': JSON.stringify(props.character) },
       React.createElement(
-        'li',
-        { className: 'stat' },
-        'STR: ',
-        props.character.stats[0]
-      ),
-      React.createElement(
-        'li',
-        { className: 'stat' },
-        'DEX: ',
-        props.character.stats[1]
-      ),
-      React.createElement(
-        'li',
-        { className: 'stat' },
-        'CON: ',
-        props.character.stats[2]
-      ),
-      React.createElement(
-        'li',
-        { className: 'stat' },
-        'INT: ',
-        props.character.stats[3]
-      ),
-      React.createElement(
-        'li',
-        { className: 'stat' },
-        'WIS: ',
-        props.character.stats[4]
-      ),
-      React.createElement(
-        'li',
-        { className: 'stat' },
-        'CHA: ',
-        props.character.stats[5]
-      )
-    ),
-    React.createElement(
-      'ul',
-      { id: 'healthBlock' },
-      React.createElement(
-        'li',
+        'h1',
         null,
-        'Temporary HP: ',
-        props.character.health[1]
+        props.character.name
       ),
       React.createElement(
-        'li',
+        'h2',
         null,
-        'Current HP: ',
-        props.character.health[0]
+        props.character.class
       ),
       React.createElement(
-        'li',
-        null,
-        'Max HP: ',
-        props.character.health[2]
-      )
-    ),
-    React.createElement('ul', { id: 'inventoryBlock' })
+        'label',
+        { htmlFor: 'level' },
+        'Level: '
+      ),
+      React.createElement('input', { id: 'level', type: 'number', name: 'level', placeholder: '0', min: '1', max: '25',
+        defaultValue: props.character.level }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'str' },
+        'STR: '
+      ),
+      React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
+        defaultValue: props.character.stats[0] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'dex' },
+        'DEX: '
+      ),
+      React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
+        defaultValue: props.character.stats[1] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'con' },
+        'CON: '
+      ),
+      React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
+        defaultValue: props.character.stats[2] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'int' },
+        'INT: '
+      ),
+      React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
+        defaultValue: props.character.stats[3] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'wis' },
+        'WIS: '
+      ),
+      React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
+        defaultValue: props.character.stats[4] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'cha' },
+        'CHA: '
+      ),
+      React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
+        defaultValue: props.character.stats[5] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'health' },
+        'Current HP: '
+      ),
+      React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '1',
+        defaultValue: props.character.health[0] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'health' },
+        'Temporary HP: '
+      ),
+      React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '0',
+        defaultValue: props.character.health[1] }),
+      React.createElement('br', null),
+      React.createElement(
+        'label',
+        { htmlFor: 'health' },
+        'Max HP: '
+      ),
+      React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '1',
+        defaultValue: props.character.health[2] }),
+      React.createElement('br', null),
+      React.createElement('input', { type: 'hidden', id: 'csrf', name: '_csrf', value: props.csrf }),
+      React.createElement('input', { type: 'hidden', name: '_id', value: props.character._id }),
+      React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Update' })
+    )
   );
 };
 
@@ -362,7 +423,7 @@ var CharList = function CharList(props) {
   var charItems = props.characters.map(function (character) {
     return React.createElement(
       'div',
-      { 'class': 'listItem', 'data-key': character._id, onClick: handleChar },
+      { 'class': 'listItem', 'data-key': character._id },
       React.createElement(
         'h1',
         { 'class': 'delChar', onClick: handleCharDel },
@@ -370,7 +431,7 @@ var CharList = function CharList(props) {
       ),
       React.createElement(
         'h2',
-        { 'class': 'name' },
+        { 'class': 'name', 'data-all': JSON.stringify(character), onClick: handleChar },
         character.name
       ),
       React.createElement(
@@ -380,16 +441,19 @@ var CharList = function CharList(props) {
         character.level,
         ') ',
         character.class
-      ),
-      React.createElement('var', {
-        'data-all': JSON.stringify(character),
-        style: 'visibility:\'hidden\''
-      })
+      )
     );
   });
   return React.createElement(
     'div',
     { className: 'list' },
+    React.createElement(
+      'button',
+      { type: 'button', onClick: function onClick(e) {
+          return createCharForm(document.querySelector('#genChar').getAttribute('csrf'), e);
+        } },
+      'New Character'
+    ),
     charItems
   );
 };
@@ -403,88 +467,62 @@ var createCharData = function createCharData(csrf, character) {
 };
 
 var createCharList = function createCharList(characters) {
-  ReactDOM.render(React.createElement(CharList, { characters: characters }), document.querySelector('#list'));
+  ReactDOM.render(React.createElement(CharList, { characters: characters }), document.querySelector('#charList'));
 };
 
 //endregion
 
 // Character Handling
 //region
-var loadChar = function loadChar() {
+var loadChar = function loadChar(csrf) {
   sendAjax('GET', '/getChar', null, function (data) {
-    ReactDOM.render(React.createElement(CharList, { characters: data.characters }), document.querySelector("#charList"));
+    createCharList(data.characters);
+    if (data.characters.length < 1) {
+      createCharForm(csrf);
+    }
   });
 };
 
 var handleNewChar = function handleNewChar(e) {
   e.preventDefault();
   $("#displayMessage").animate({ left: 'hide' }, 500);
-
-  if (document.querySelector('#charName').value === '') {
-    handleError("Your character needs a name");
-    return false;
-  }
-
-  var inputHealth = document.querySelector('#maxHealth').value;
-  var tempForm = document.querySelector('#charForm');
-
-  var formResult = {
-    name: document.querySelector('#charName').value,
-    level: document.querySelector('#level').value,
-    class: document.querySelector('#class').value,
-    stats: document.querySelectorAll('.stat').value,
-    health: [inputHealth, 0, inputHealth],
-    inventory: []
-  };
-  // Check for alternative to .serialize()
-  sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), formResult.serialize(), function () {
-    loadChar();
+  sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), $('#charForm').serialize(), function () {
+    loadChar(document.querySelector('#genChar').getAttribute('csrf'));
   });
   return false;
 };
 
-// Check for alternative to .serialize()
 var saveChar = function saveChar(e) {
-  var key = e.target.getAttribute('data-key');
-  var token = $('#csrf').serialize();
-  var obj = '_id=' + key + '&' + token + '&';
-  sendAjax('POST', '/save', $('#charData').serialize(), function (msg) {
-    handleError(msg);
+  e.preventDefault();
+  var obj = document.querySelector('#charData').getAttribute('data-all');
+  obj = JSON.parse(obj);
+  obj._csrf = document.querySelector('#genChar').getAttribute('csrf');
+  obj = JSON.stringify(obj);
+  sendAjax('POST', '/saveChar', $('#charData').serialize(), function (msg) {
+    if (!msg.redirect) {
+      handleError(JSON.stringify(msg));
+    }
+    console.log('fire');
+    loadChar(document.querySelector('#genChar').getAttribute('csrf'));
   });
 };
 
-// EDIT
-// 
 var handleChar = function handleChar(e) {
-  if (e.target !== 'div') {
-    e.target = e.target.parentElement;
-  }
-  var key = e.target.getAttribute('data-key');
+  var key = e.target.parentElement.getAttribute('data-key');
+  var token = document.querySelector('#genChar').getAttribute('csrf');
   var char = JSON.parse(e.target.getAttribute('data-all'));
-  ReactDOM.render(React.createElement(BlueprintCanvas, { myKey: key }), document.querySelector("#draw"));
-
-  var canvas = document.querySelector('#bpRearCanvas');
-  var ctx = canvas.getContext("2d");
-  var dataURL = e.target.getAttribute('data-walls');
-  if (dataURL) {
-    var img = new Image();
-    img.src = dataURL;
-    ctx.drawImage(img, 0, 0);
-  } else {
-    ctx.fillStyle = "#00F";
-    ctx.fillRect(0, 0, 800, 500);
-  }
+  createCharData(token, char);
 };
 
 var handleCharDel = function handleCharDel(e) {
   var key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
-  var token = $('#csrf').serialize();
+  var token = '_csrf=' + document.querySelector('#genChar').getAttribute('csrf');
   var obj = '_id=' + key + '&' + token;
   sendAjax('DELETE', '/delChar', obj, function (msg) {
     console.dir(msg);
   });
-  e.target.parentElement.hidden = true;
-  loadChar();
+  //e.target.parentElement.hidden = true;
+  loadChar(document.querySelector('#genChar').getAttribute('csrf'));
 };
 //endregion
 
@@ -638,11 +676,13 @@ var handleChangePass = function handleChangePass(e) {
 };
 
 var setup = function setup(csrf) {
+  var charApp = document.querySelector('#genChar');
   var loginButton = document.querySelector('#loginButton');
   var signupButton = document.querySelector('#signupButton');
   var changePassButton = document.querySelector('#changePassButton');
   var aboutButton = document.querySelector('#aboutButton');
   var donateButton = document.querySelector('#donateButton');
+  var charButton = document.querySelector('#charButton');
 
   if (changePassButton) {
     changePassButton.addEventListener('click', function (e) {
@@ -677,11 +717,24 @@ var setup = function setup(csrf) {
     });
   }
 
+  if (charApp) {
+    loadChar(csrf);
+    charApp.setAttribute('csrf', csrf);
+  }
+
   if (donateButton) {
     donateButton.addEventListener('click', function (e) {
       e.preventDefault();
       createDonateWindow();
       return false;
+    });
+  }
+
+  if (charButton) {
+    charButton.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector('#content').innerHTML = '';
+      loadChar(csrf);
     });
   }
 };

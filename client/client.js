@@ -51,6 +51,8 @@ const DonateWindow = (props) => {
 };
 
 const createDonateWindow = () => {
+  document.querySelector('#genChar').innerHTML = '';
+  document.querySelector('#charList').innerHTML = '';
   ReactDOM.render(
     <DonateWindow />,
     document.querySelector('#content')
@@ -133,6 +135,8 @@ const AboutWindow = (props) => {
 };
 
 const createAboutWindow = () => {
+  document.querySelector('#genChar').innerHTML = '';
+  document.querySelector('#charList').innerHTML = '';
   ReactDOM.render(
     <AboutWindow />,
     document.querySelector('#content')
@@ -140,13 +144,15 @@ const createAboutWindow = () => {
 };
 //endregion
 
-// EDIT
+/* // EDIT
 // EncounterCalculator
 const CalcWindow = () => {
-
+  
 };
 
 const createCalcWindow = () => {
+  document.querySelector('#genChar').innerHTML = '';
+  document.querySelector('#charList').innerHTML = '';
   ReactDOM.render(
     <CalcWindow />,
     document.querySelector('#content')
@@ -155,49 +161,56 @@ const createCalcWindow = () => {
 
 const handleCalc = () => {
 
-};
+}; */
 
 // React (Character)
 //region
 const CharForm = (props) => {
   return (
     <form id="charForm" name="charForm" onSubmit={handleNewChar} action="/newChar" method="POST" className="form">
-      <label htmlFor="charName">Name: </label>
-      <input id="charName" type="text" name="charName" placeholder="Name"/><br/>
+      <label htmlFor="name">Name: </label>
+      <input id="name" type="text" name="name" placeholder="Name"/><br/>
       <label htmlFor="level">Level: </label>
       <input id="level" type="number" name="level" placeholder="0" min="1" max="25"/><br/>
       <label htmlFor="class">Class: </label>
       <input id="class" type="text" name="class" placeholder="Fighter (Champion)" /><br/>
       <label htmlFor="str">STR: </label>
-      <input className="stat" type="number" name="str" placeholder="10" min="1" max="30"/><br/>
+      <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"/><br/>
       <label htmlFor="dex">DEX: </label>
-      <input className="stat" type="number" name="dex" placeholder="10" min="1" max="30"/><br/>
+      <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"/><br/>
       <label htmlFor="con">CON: </label>
-      <input className="stat" type="number" name="con" placeholder="10" min="1" max="30"/><br/>
+      <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"/><br/>
       <label htmlFor="int">INT: </label>
-      <input className="stat" type="number" name="int" placeholder="10" min="1" max="30"/><br/>
+      <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"/><br/>
       <label htmlFor="wis">WIS: </label>
-      <input className="stat" type="number" name="wis" placeholder="10" min="1" max="30"/><br/>
+      <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"/><br/>
       <label htmlFor="cha">CHA: </label>
-      <input className="stat" type="number" name="cha" placeholder="10" min="1" max="30"/><br/>
-      <label htmlFor="maxHealth">Max Health: </label>
-      <input className="health" type="number" name="maxHealth" placeholder="0" min="1" /><br/>
-      <input type="hidden" name="_csrf" value={props.csrf}/>
+      <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"/><br/>
+      <label htmlFor="health">Max Health: </label>
+      <input class="health" id="health" type="number" name="health" placeholder="0" min="1" /><br/>
+      <input type="hidden" id="csrf" name="_csrf" value={props.csrf}/>
       <input className="formSubmit" type="submit" value="+ Character"/>
     </form>
   );
 };
 
 // Need inventory block
-// Need save button
-// Need buttons to edit values
 const CharData = (props) => {
   return (
-    <div id="charData">
+    /*
+    <div id="charData" data-all={JSON.stringify(props.character)}>
       <h1>{props.character.name}</h1>
-      <h2>{props.character.level}, {props.character.class}</h2>
+      <h2>(Level {props.character.level}) {props.character.class}</h2>
       <ul id="statBlock">
-        <li className='stat'>STR: {props.character.stats[0]}</li>
+        <li className='stat'>STR: {props.character.stats[0]}
+          <button type="button" onClick={()=>{
+            const locale = document.querySelector('#charData');
+            let data = JSON.parse(locale.getAttribute('data-all'));
+            data.stats[0]++;
+            locale.setAttribute('data-all', JSON.stringify(data));
+            saveChar()
+          }}>+</button>
+        </li>
         <li className='stat'>DEX: {props.character.stats[1]}</li>
         <li className='stat'>CON: {props.character.stats[2]}</li>
         <li className='stat'>INT: {props.character.stats[3]}</li>
@@ -211,7 +224,46 @@ const CharData = (props) => {
       </ul>
       <ul id="inventoryBlock">
       </ul>
+      <button type="button" onClick={saveChar} data-key={props.character._id}>Save Changes</button>
     </div>
+    */
+  <form id="charData" name="charData" onSubmit={saveChar} action="/saveChar" method="POST" className="form" data-all={JSON.stringify(props.character)}>
+    <h1>{props.character.name}</h1>
+      <h2>{props.character.class}</h2>
+    <label htmlFor="level">Level: </label>
+    <input id="level" type="number" name="level" placeholder="0" min="1" max="25" 
+      defaultValue={props.character.level}/><br/>
+    <label htmlFor="str">STR: </label>
+    <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
+      defaultValue={props.character.stats[0]}/><br/>
+    <label htmlFor="dex">DEX: </label>
+    <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
+      defaultValue={props.character.stats[1]}/><br/>
+    <label htmlFor="con">CON: </label>
+    <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
+      defaultValue={props.character.stats[2]}/><br/>
+    <label htmlFor="int">INT: </label>
+    <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
+      defaultValue={props.character.stats[3]}/><br/>
+    <label htmlFor="wis">WIS: </label>
+    <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
+      defaultValue={props.character.stats[4]}/><br/>
+    <label htmlFor="cha">CHA: </label>
+    <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
+      defaultValue={props.character.stats[5]}/><br/>
+    <label htmlFor="health">Current HP: </label>
+    <input class="health" id="health" type="number" name="health" placeholder="0" min="1" 
+      defaultValue={props.character.health[0]}/><br/>
+    <label htmlFor="health">Temporary HP: </label>
+    <input class="health" id="health" type="number" name="health" placeholder="0" min="0" 
+      defaultValue={props.character.health[1]}/><br/>
+    <label htmlFor="health">Max HP: </label>
+    <input class="health" id="health" type="number" name="health" placeholder="0" min="1" 
+      defaultValue={props.character.health[2]}/><br/>
+    <input type="hidden" id="csrf" name="_csrf" value={props.csrf}/>
+    <input type="hidden" name="_id" value={props.character._id}/>
+    <input className="formSubmit" type="submit" value="Update"/>
+  </form>
   );
 };
 
@@ -223,19 +275,16 @@ const CharList = (props) => {
   }
   const charItems = props.characters.map((character) => {
     return (
-      <div class="listItem" data-key={character._id} onClick={handleChar}>
+      <div class="listItem" data-key={character._id}>
         <h1 class="delChar" onClick={handleCharDel}> X </h1>
-        <h2 class="name">{character.name}</h2>
+        <h2 class="name" data-all={JSON.stringify(character)} onClick={handleChar}>{character.name}</h2>
         <h3 class="lvlClass">({character.level}) {character.class}</h3>
-        <var 
-          data-all={JSON.stringify(character)}
-          style="visibility:'hidden'"
-        ></var>
       </div>
     );
   });
   return (
     <div className="list">
+      <button type="button" onClick={(e) => createCharForm(document.querySelector('#genChar').getAttribute('csrf'), e)}>New Character</button>
       {charItems}
     </div>
   );
@@ -258,7 +307,7 @@ const createCharData = (csrf, character) => {
 const createCharList = (characters) => {
   ReactDOM.render(
     <CharList characters={characters} />,
-    document.querySelector('#list')
+    document.querySelector('#charList')
   );
 };
 
@@ -266,85 +315,55 @@ const createCharList = (characters) => {
 
 // Character Handling
 //region
-const loadChar = () => {
+const loadChar = (csrf) => {
   sendAjax('GET', '/getChar', null, (data) => {
-    ReactDOM.render(
-      <CharList characters={data.characters}/>, document.querySelector("#charList")
-    );
+    createCharList(data.characters);
+    if(data.characters.length < 1) {
+      createCharForm(csrf);
+    }
   });
 };
 
 const handleNewChar = (e) => {
   e.preventDefault();
-  $("#displayMessage").animate({left:'hide'}, 500);
-
-  if(document.querySelector('#charName').value === '') {
-    handleError("Your character needs a name");
-    return false;
-  }
-
-  const inputHealth = document.querySelector('#maxHealth').value;
-  const tempForm = document.querySelector('#charForm');
-
-  const formResult = {
-    name: document.querySelector('#charName').value,
-    level: document.querySelector('#level').value,
-    class: document.querySelector('#class').value,
-    stats: document.querySelectorAll('.stat').value,
-    health: [inputHealth,0,inputHealth],
-    inventory: [],
-  };
-  // Check for alternative to .serialize()
-  sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), formResult.serialize(), () => {
-    loadChar();
+  $("#displayMessage").animate({left:'hide'}, 500);  
+  sendAjax('POST', document.querySelector("#charForm").getAttribute("action"), $('#charForm').serialize(), () => {
+    loadChar(document.querySelector('#genChar').getAttribute('csrf'));
   });
   return false;
 };
 
-// Check for alternative to .serialize()
 const saveChar = (e) => {
-  const key = e.target.getAttribute('data-key');
-  const token = $('#csrf').serialize();
-  const obj = `_id=${key}&${token}&`;
-  sendAjax('POST', '/save', $('#charData').serialize(), (msg) => {
-    handleError(msg);
+  e.preventDefault();
+  let obj = document.querySelector('#charData').getAttribute('data-all');
+  obj = JSON.parse(obj);
+  obj._csrf = document.querySelector('#genChar').getAttribute('csrf');
+  obj = JSON.stringify(obj);
+  sendAjax('POST', '/saveChar', $('#charData').serialize(), (msg) => {
+    if (!msg.redirect) {
+      handleError(JSON.stringify(msg));
+    }
+    console.log('fire');
+    loadChar(document.querySelector('#genChar').getAttribute('csrf'));
   });
 };
 
-// EDIT
-// 
 const handleChar = (e) => {
-  if (e.target !== 'div') {
-    e.target = e.target.parentElement;
-  }
-  let key = e.target.getAttribute('data-key');
+  let key = e.target.parentElement.getAttribute('data-key');
+  let token = document.querySelector('#genChar').getAttribute('csrf');
   let char = JSON.parse(e.target.getAttribute('data-all'));
-  ReactDOM.render(
-    <BlueprintCanvas myKey={key} />, document.querySelector("#draw")
-  );
-
-  const canvas = document.querySelector('#bpRearCanvas');
-  const ctx = canvas.getContext("2d");
-  const dataURL = e.target.getAttribute('data-walls');
-  if (dataURL) {
-    const img = new Image();
-    img.src = dataURL;
-    ctx.drawImage(img, 0, 0);
-  } else {
-    ctx.fillStyle="#00F";
-    ctx.fillRect(0,0,800,500);
-  }
+  createCharData(token, char);
 };
 
 const handleCharDel = (e) => {
   const key = JSON.stringify(e.target.parentElement.getAttribute('data-key'));
-  const token = $('#csrf').serialize();
+  const token = `_csrf=${document.querySelector('#genChar').getAttribute('csrf')}`;
   const obj = `_id=${key}&${token}`;
   sendAjax('DELETE', '/delChar', obj, (msg) => {
     console.dir(msg);
   });
-  e.target.parentElement.hidden = true;
-  loadChar();
+  //e.target.parentElement.hidden = true;
+  loadChar(document.querySelector('#genChar').getAttribute('csrf'));
 };
 //endregion
 
@@ -482,11 +501,13 @@ const handleChangePass = (e) => {
 };
 
 const setup = (csrf) => {
+  const charApp = document.querySelector('#genChar');
   const loginButton = document.querySelector('#loginButton');
   const signupButton = document.querySelector('#signupButton');
   const changePassButton = document.querySelector('#changePassButton');
   const aboutButton = document.querySelector('#aboutButton');
   const donateButton = document.querySelector('#donateButton');
+  const charButton = document.querySelector('#charButton');
 
   if (changePassButton) {
     changePassButton.addEventListener('click', (e) => {
@@ -521,12 +542,25 @@ const setup = (csrf) => {
     })
   }
 
+  if (charApp) {
+    loadChar(csrf);
+    charApp.setAttribute('csrf', csrf);
+  }
+
   if (donateButton) {
     donateButton.addEventListener('click', (e) => {
       e.preventDefault();
       createDonateWindow();
       return false;
     });
+  }
+
+  if (charButton) {
+    charButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('#content').innerHTML = '';
+      loadChar(csrf);
+    })
   }
 };
 

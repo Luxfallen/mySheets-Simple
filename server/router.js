@@ -14,6 +14,7 @@ const router = (app) => {
   app.post('/newChar', mid.requiresLogin, controllers.Character.makeChar);
   app.get('/getChar', mid.requiresLogin, controllers.Character.getChar);
   app.delete('/delChar', mid.requiresLogin, controllers.Character.delChar);
+  app.post('/saveChar', mid.requiresLogin, mid.requiresSecure, controllers.Character.saveChar);
   app.get('/*', mid.requiresSecure, mid.requiresLogout, controllers.Account.renderLogin);
 };
 

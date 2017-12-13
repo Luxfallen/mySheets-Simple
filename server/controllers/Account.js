@@ -133,28 +133,11 @@ const changePass = (request, response) => {
             savePromise.then(() => {
               req.session.account = Account.AccountModel.toAPI(newData);
             });
-            console.log(doc);
-            console.log(newData);
-            console.log(salt);
-            console.log(hash);
             return res.json({
               redirect: '/app',
             });
           });
         });
-      /*       const savePromise = userAccount.save();
-            savePromise.then(() => {
-              req.session.account = Account.AccountModel.toAPI(userAccount);
-              return res.json({
-                redirect: '/app',
-              });
-            });
-            savePromise.catch((addErr) => {
-              console.log(addErr);
-              return res.status(400).json({
-                error: 'An error has occurred.',
-              });
-            }); */
     });
 };
 

@@ -15,11 +15,12 @@ const makeCharacter = (request, response) => {
   if (!request.body.name) {
     return response.status(400).json({ error: 'Characters need names' });
   }
-
   const charInfo = {
     name: request.body.name,
-    stats: request.body.stats,
-    health: request.body.health,
+    level: request.body.level,
+    class: request.body.class,
+    stats: request.body.stat,
+    health: [request.body.health, 0, request.body.health],
     inventory: request.body.inventory,
     owner: request.session.account._id,
   };
@@ -64,9 +65,32 @@ const deleteCharacter = (request, response) => {
   });
 };
 
+const saveCharacter = (request, response) => {
+  const req = request;
+  const res = response;
+  return Character.CharacterModel.findById(req.body._id, (err, doc) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error has occurred' });
+    }
+    const newData = doc;
+    const { level, stat, health } = req.body;
+    newData.level = level;
+    newData.stats = stat;
+    newData.health = health;
+    const savePromise = newData.save();
+    savePromise.then(() => res.status(202).json({ redirect: '/' }));
+    savePromise.catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: 'An error has occurred' });
+    });
+  });
+};
+
 module.exports = {
   renderChar: renderCharacter,
   makeChar: makeCharacter,
   getChar: getCharacters,
   delChar: deleteCharacter,
+  saveChar: saveCharacter,
 };
