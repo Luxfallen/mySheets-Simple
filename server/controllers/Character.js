@@ -84,6 +84,7 @@ const saveCharacter = (request, response) => {
       console.log(error);
       return res.status(400).json({ error: 'An error has occurred' });
     });
+    return savePromise;
   });
 };
 
