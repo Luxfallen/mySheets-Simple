@@ -95,7 +95,7 @@ const AboutWindow = (props) => {
       <h3>The API</h3>
       <p>
         The API handles mostly storage. Saving, loading, creating, and deleting characters, 
-        while keeping them seperated by accounts.
+        while keeping them separated by accounts.
       </p>
       <h3>What Went Right or Wrong</h3>
       <p>
