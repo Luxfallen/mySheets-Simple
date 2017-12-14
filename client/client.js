@@ -86,51 +86,34 @@ const AboutWindow = (props) => {
       <h1>Documentation</h1>
       <h3>Purpose</h3>
       <p>
-        The site is intended to be a tool for tabletop role-playing games and contructing maps for them. 
-        The idea initially came from a personal need for a neat and free way to make a blueprint for a 
-        specific building in a Dungeons & Dragons campaign.
+        After having some friends forget their character sheets one too many 
+        times, I thought of the site as a way to keep track of important stats 
+        and the like that aren't exactly something you can look up in a handbook. 
+        Users can add a character and their key information and use it to help 
+        keep track of things, even if they do not have the character sheet handy.
+      </p>
+      <h3>The API</h3>
+      <p>
+        The API handles mostly storage. Saving, loading, creating, and deleting characters, 
+        while keeping them seperated by accounts.
+      </p>
+      <h3>What Went Right or Wrong</h3>
+      <p>
+        The app was originally going to be implemented using react-create-app, 
+        which uses React classes. I drastically underestimated the complexities 
+        and niche issues that would come about with using the different architecture. 
+        Especially when I thought I could learn it in a week. 
       </p>
       <p>
-        The initial idea seems to have been overscoped,
-        especially considering that the idea was simplified even further in an attempt to meet the deadline. 
-        As it stands, the site is capable of creating "blueprints" which users can draw on using HTML Canvas. 
-        Rather than storing coordinates as initially planned, I was recommended to save the canvas as an image, 
-        and then load the image back in when a user wanted to continue developing. However, there seems to be 
-        an issue when dealing with canvas.toDataURL that I did not anticipate, which ate up a good deal of time 
-        and is still not resolved, so the user cannot load "blueprints" that they have previously worked on. 
-        I hope to rectify this error and restructure a good deal of the app in future development. 
+        Overscoped and underestimated, the app only has base functionality, 
+        and minimal styling, rather than the other features I intended to implement. 
       </p>
-      <h3>Profitability</h3>
+      <h3>Future Development</h3>
       <p>
-        Everyone hates ads, but they are likely a substantial source of income and support for a good deal of websites. 
-        It is with that in mind that I intended to make the app have advertisements on the right side of the screen. 
-        Later on, I thought about how a good deal of projects, especially webcomics, are funded by both ads and donations. 
-        With this in mind, I created the "Donate" page. At the moment, it doesn't do anything with the information it's 
-        presented and does not prompt individuals for personal information, as the site has nowhere near enough security 
-        to warrant that.
-      </p>
-      <h3>Templating</h3>
-      <p>
-        A combination of express and handlebars was used in order to create usable pages. However, they only account for
-        the script links, navigation, and a very limited skeleton (a couple empty sections).
-      </p>
-      <h3>Use of MVC</h3>
-      <p>
-        The Model-View-Controller pattern was used to generate accounts and "blueprints" that belonged to individual accounts. 
-        The pattern also enabled an efficient use of MongoDB.
-      </p>
-      <h3>Use of MongoDB</h3>
-      <p>
-        Account information and blueprints are saved to MongoDB for safe keeping. Accounts consist of username, password, the 
-        date the account was established, and information necessary to decrypt and verify passwords, which are not only hashed, but 
-        also encrypted to add a stronger layer of security. Each blueprint stored has a name, owner ID, and a string value that 
-        was used in order to store the outcome of canvas.toDataURL() to be used when the canvas were to be loaded in.
-      </p>
-      <h3>Above & Beyond</h3>
-      <p>
-        Express and handlebars helped a good deal, but most elements are generated with React. 
-        Although the initial "Above & Beyond" was intended to be an efficient storage of "blueprint" 
-        information via bitpacking, inexperience on my part led to a few problems eating too much time.
+        Going forward, I hope to develop a greater understanding of the 
+        React framework and be able to put the original idea together, 
+        add inventory management, experience tracking, and a challenge rating 
+        calculator to make things easier and the app more useful.
       </p>
     </div>
   )
