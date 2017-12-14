@@ -1,5 +1,6 @@
 body {
-  font-family: sans-serif; }
+  font-family: sans-serif;
+  min-width: 850px; }
 
 canvas {
   position: absolute; }
@@ -27,7 +28,7 @@ section {
 nav {
   display: block;
   width: 60%;
-  height: 8vh;
+  height: 12vh;
   margin: 0 auto;
   text-align: center; }
 
@@ -60,37 +61,41 @@ nav {
   #content #documentation {
     text-align: left; }
 
-#createBp {
-  min-width: 280px;
-  float: left;
+#genChar {
+  position: relative;
+  float: right;
+  min-width: 310px;
+  max-width: 500px;
   clear: left;
-  width: 30vw;
-  height: 8vh;
-  background-color: burlywood; }
+  width: 65vw;
+  padding: 20px; }
+  #genChar form label {
+    font-size: 1.1666em;
+    padding-bottom: 3px;
+    text-align: right;
+    display: inline-block;
+    width: 150px; }
+  #genChar form input {
+    width: 80px;
+    margin-right: 20%;
+    margin-left: 5%; }
 
-#bps {
-  float: left;
+#charList {
   overflow-y: scroll;
   width: 30vw;
-  height: 82vh;
-  background-color: burlywood;
-  clear: left; }
+  min-width: 280px;
+  height: 82vh; }
 
-#draw {
-  float: right;
-  clear: right;
-  top: -8vh;
-  width: 65vw;
-  height: 90vh;
-  background-color: wheat; }
-  #draw input {
-    z-index: 2; }
-
-.listItem h1 {
-  color: red;
-  display: inline-block;
-  width: 1.5em; }
-
-.listItem h2 h3 {
-  display: inline-block;
-  width: 20vw; }
+.listItem {
+  margin-bottom: 20px; }
+  .listItem h1 {
+    color: red;
+    display: inline-block;
+    width: 1.5em;
+    margin-bottom: 0;
+    margin-top: 0; }
+  .listItem h2, .listItem h3 {
+    display: inline-block;
+    width: 15vw;
+    margin-top: 0;
+    margin-bottom: 0; }

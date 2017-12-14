@@ -3,9 +3,7 @@
 /* eslint-disable */
 
 /**---------------------------- ATTN -----------------------------------
- * This still is not fully operational, and further edits must be made.
- * Ctrl+F the word 'EDIT' to find such situations.
- * Testing must go on thereafter
+ * Nothing of note.
  * ---------------------------------------------------------------------
  */
 
@@ -65,8 +63,12 @@ var DonateWindow = function DonateWindow(props) {
 };
 
 var createDonateWindow = function createDonateWindow() {
-  document.querySelector('#genChar').innerHTML = '';
-  document.querySelector('#charList').innerHTML = '';
+  var tempA = document.querySelector('#genChar');
+  var tempB = document.querySelector('#charList');
+  if (tempA && tempB) {
+    tempA.innerHTML = '';
+    tempB.innerHTML = '';
+  }
   ReactDOM.render(React.createElement(DonateWindow, null), document.querySelector('#content'));
 };
 
@@ -169,8 +171,12 @@ var AboutWindow = function AboutWindow(props) {
 };
 
 var createAboutWindow = function createAboutWindow() {
-  document.querySelector('#genChar').innerHTML = '';
-  document.querySelector('#charList').innerHTML = '';
+  var tempA = document.querySelector('#genChar');
+  var tempB = document.querySelector('#charList');
+  if (tempA && tempB) {
+    tempA.innerHTML = '';
+    tempB.innerHTML = '';
+  }
   ReactDOM.render(React.createElement(AboutWindow, null), document.querySelector('#content'));
 };
 //endregion
@@ -328,7 +334,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { id: 'level', type: 'number', name: 'level', placeholder: '0', min: '1', max: '25',
         defaultValue: props.character.level }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'str' },
@@ -336,7 +341,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
         defaultValue: props.character.stats[0] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'dex' },
@@ -344,7 +348,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
         defaultValue: props.character.stats[1] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'con' },
@@ -352,7 +355,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
         defaultValue: props.character.stats[2] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'int' },
@@ -360,7 +362,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
         defaultValue: props.character.stats[3] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'wis' },
@@ -368,7 +369,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
         defaultValue: props.character.stats[4] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'cha' },
@@ -376,7 +376,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'stat', type: 'number', name: 'stat', placeholder: '10', min: '1', max: '30',
         defaultValue: props.character.stats[5] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'health' },
@@ -384,7 +383,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '1',
         defaultValue: props.character.health[0] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'health' },
@@ -392,7 +390,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '0',
         defaultValue: props.character.health[1] }),
-      React.createElement('br', null),
       React.createElement(
         'label',
         { htmlFor: 'health' },
@@ -400,7 +397,6 @@ var CharData = function CharData(props) {
       ),
       React.createElement('input', { 'class': 'health', id: 'health', type: 'number', name: 'health', placeholder: '0', min: '1',
         defaultValue: props.character.health[2] }),
-      React.createElement('br', null),
       React.createElement('input', { type: 'hidden', id: 'csrf', name: '_csrf', value: props.csrf }),
       React.createElement('input', { type: 'hidden', name: '_id', value: props.character._id }),
       React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Update' })
@@ -423,20 +419,20 @@ var CharList = function CharList(props) {
   var charItems = props.characters.map(function (character) {
     return React.createElement(
       'div',
-      { 'class': 'listItem', 'data-key': character._id },
+      { className: 'listItem', 'data-key': character._id },
       React.createElement(
         'h1',
-        { 'class': 'delChar', onClick: handleCharDel },
+        { onClick: handleCharDel },
         ' X '
       ),
       React.createElement(
         'h2',
-        { 'class': 'name', 'data-all': JSON.stringify(character), onClick: handleChar },
+        { 'data-all': JSON.stringify(character), onClick: handleChar },
         character.name
       ),
       React.createElement(
         'h3',
-        { 'class': 'lvlClass' },
+        null,
         '(',
         character.level,
         ') ',

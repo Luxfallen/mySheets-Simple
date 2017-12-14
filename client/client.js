@@ -1,9 +1,7 @@
 /* eslint-disable */
 
 /**---------------------------- ATTN -----------------------------------
- * This still is not fully operational, and further edits must be made.
- * Ctrl+F the word 'EDIT' to find such situations.
- * Testing must go on thereafter
+ * Nothing of note.
  * ---------------------------------------------------------------------
  */
 
@@ -51,8 +49,12 @@ const DonateWindow = (props) => {
 };
 
 const createDonateWindow = () => {
-  document.querySelector('#genChar').innerHTML = '';
-  document.querySelector('#charList').innerHTML = '';
+  const tempA = document.querySelector('#genChar');
+  const tempB = document.querySelector('#charList');
+  if (tempA && tempB){
+    tempA.innerHTML='';
+    tempB.innerHTML='';
+  }
   ReactDOM.render(
     <DonateWindow />,
     document.querySelector('#content')
@@ -135,8 +137,12 @@ const AboutWindow = (props) => {
 };
 
 const createAboutWindow = () => {
-  document.querySelector('#genChar').innerHTML = '';
-  document.querySelector('#charList').innerHTML = '';
+  const tempA = document.querySelector('#genChar');
+  const tempB = document.querySelector('#charList');
+  if (tempA && tempB){
+    tempA.innerHTML='';
+    tempB.innerHTML='';
+  }
   ReactDOM.render(
     <AboutWindow />,
     document.querySelector('#content')
@@ -232,34 +238,34 @@ const CharData = (props) => {
       <h2>{props.character.class}</h2>
     <label htmlFor="level">Level: </label>
     <input id="level" type="number" name="level" placeholder="0" min="1" max="25" 
-      defaultValue={props.character.level}/><br/>
+      defaultValue={props.character.level}/>
     <label htmlFor="str">STR: </label>
     <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
-      defaultValue={props.character.stats[0]}/><br/>
+      defaultValue={props.character.stats[0]}/>
     <label htmlFor="dex">DEX: </label>
     <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
-      defaultValue={props.character.stats[1]}/><br/>
+      defaultValue={props.character.stats[1]}/>
     <label htmlFor="con">CON: </label>
     <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
-      defaultValue={props.character.stats[2]}/><br/>
+      defaultValue={props.character.stats[2]}/>
     <label htmlFor="int">INT: </label>
     <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
-      defaultValue={props.character.stats[3]}/><br/>
+      defaultValue={props.character.stats[3]}/>
     <label htmlFor="wis">WIS: </label>
     <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
-      defaultValue={props.character.stats[4]}/><br/>
+      defaultValue={props.character.stats[4]}/>
     <label htmlFor="cha">CHA: </label>
     <input class="stat" type="number" name="stat" placeholder="10" min="1" max="30"
-      defaultValue={props.character.stats[5]}/><br/>
+      defaultValue={props.character.stats[5]}/>
     <label htmlFor="health">Current HP: </label>
     <input class="health" id="health" type="number" name="health" placeholder="0" min="1" 
-      defaultValue={props.character.health[0]}/><br/>
+      defaultValue={props.character.health[0]}/>
     <label htmlFor="health">Temporary HP: </label>
     <input class="health" id="health" type="number" name="health" placeholder="0" min="0" 
-      defaultValue={props.character.health[1]}/><br/>
+      defaultValue={props.character.health[1]}/>
     <label htmlFor="health">Max HP: </label>
     <input class="health" id="health" type="number" name="health" placeholder="0" min="1" 
-      defaultValue={props.character.health[2]}/><br/>
+      defaultValue={props.character.health[2]}/>
     <input type="hidden" id="csrf" name="_csrf" value={props.csrf}/>
     <input type="hidden" name="_id" value={props.character._id}/>
     <input className="formSubmit" type="submit" value="Update"/>
@@ -275,10 +281,10 @@ const CharList = (props) => {
   }
   const charItems = props.characters.map((character) => {
     return (
-      <div class="listItem" data-key={character._id}>
-        <h1 class="delChar" onClick={handleCharDel}> X </h1>
-        <h2 class="name" data-all={JSON.stringify(character)} onClick={handleChar}>{character.name}</h2>
-        <h3 class="lvlClass">({character.level}) {character.class}</h3>
+      <div className="listItem" data-key={character._id}>
+        <h1 onClick={handleCharDel}> X </h1>
+        <h2 data-all={JSON.stringify(character)} onClick={handleChar}>{character.name}</h2>
+        <h3>({character.level}) {character.class}</h3>
       </div>
     );
   });
